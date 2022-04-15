@@ -1,0 +1,66 @@
+ 
+1.	Abstract
+Millions of mobile applications are being created by application developers every year. However, only a small fraction of that become successful depending upon the parameter chosen to identify the success for an application. The objective of the project is to build a machine learning model based on various parameters to predict the probability of success of an application. 
+2.	Methodology
+The choice of methodology for predicting application success is dependent on the available data. We used the data available on the Kaggle website that contained datapoints that had various parameter related to that application. We chose one of the datapoints as the success metric for a new app. 
+Figure 1: High level methodology below shows the broad methodology used for the project. 
+ 
+Figure 1: High level methodology
+As shown in the figure, the original data was split into 20% test and 80% train data. The test data was kept untouched, and all analysis was done on the training dataset.
+Exploratory data analysis was done on the training dataset to look for data fitness for use in the models. Strategies were also formed for imputing missing values. We also did encoding of categorical variables at this stage. 
+After the data was cleaned, a ML pipeline was built for each classification model, and different models were trained using different hyperparameters, and using GridSearchCV.
+Once the best performing models were identified, we ensembled 3 best models using stacking and using logical regression as the stacking methodology. This is shown in Figure 2: Stacking multiple classifiers.
+ 
+Figure 2: Stacking multiple classifiers
+The final were tuned again to find the best model for stacking, and a final ML pipeline was built as the end result. 
+As the last step, a dashboard was built using Google dashboard to visualize various parameters, and get hands-on experience with dashboarding.
+The following tools and libraries were used for the project:
+	Sci-kit learn
+	Catboost
+	XGBoost
+	Optuna
+	GoogleDatastudio
+3.	Detailed Methodology and Steps
+3.1.	Data Structure & data cleaning
+The dataset consisted of 2,312,944 datapoints, with each data point having 24 features. Out of the 24 features, we selected a subset of 8 features as the datapoints for an application, as these are the ones that are available when a new app is launched. For the success metric, we chose the number of downloads as the success metric. This could be a different parameter like the rating score etc depending upon the business problem formulation. Since we wanted to solve a classification problem, we divided the number of downloads into 4 buckets, and predicted the quartile in which a new app would endup in terms of number of downloads. We could also think of building a linear regression model to predict the actual number of downloads as the success metric.
+The selected features are as shown in Figure 3: Features & label in the dataset with the number of non-null values. We also trimmed the dataset to include only those apps for which the currency was in USD to normalize the price of the app. Doing this reduced less than 0.01% of the overall dataset.
+ 
+Figure 3: Features & label in the dataset 
+We create a train test split in 80:20 ratio, and set aside the test dataset to test the model performance. 
+3.2.	Exploratory Data Analysis
+Exploratory data analysis was done on the training dataset that showed that the data characteristics. We chose 10,000 as the threshold for predicting success as that was close to the 75th percentile. 
+Some of the graphs for exploratory data analysis are shown below. 
+ 
+Figure 4: Distribution of successful apps by category 
+ 
+Figure 5: Distribution of successful apps by Ad support
+3.3.	Data Imputation
+No imputation was required as we cleaned the data before hand, and discarded null values.
+3.4.	Model Training
+We trained multiple models as a part of the project like Logistic regression, GBC classifiers, Decision tree classifiers, Random Forest Classifiers, Gradient Boosting classifier and Catboost classifiers for the project.
+Since the dataset was an unbalanced dataset, we used the ROC-AUC curve as the evaluation metric. 
+The ROC-AUC Scores for the untuned models along with their fit times as are shown in Table 1: Untuned classification model performance. 
+ 
+Table 1: Untuned classification model performance
+3.5.	Hyperparameter tuning
+The various hyperparameters were tuned using Optuna & GridSearchCV to get the best model within each classifier. The best performing parameters for the 2 best model classifiers viz. catboost and Random forest classifiers and their corresponding hyperparameter values for each model and the mean ROC-AUC score for each model is shown below.
+CatBoost Classifier
+Hyperparameters tuned:
+•	Depth:5
+•	Learning Rate:0.001
+•	Lambda: 0.05
+•	n_estimators: 2000
+ROC_AUC Value: 0.783
+Table 2: Hyperparameter tuning for Catboost
+
+Random Forest Classifier
+Hyperparameters tuned: 
+•	N_classifiers: 150 
+•	Criteria: Entropy
+ROC_AUC value: 0.758792
+Table 3: Hyperparameter tuning for Random Forest
+
+The best models were then used with the test data to make predictions, and the model scores for gridCV and the scores for the test data are as shown in the table below. 
+Model	Train Score	Test Score
+CatBoost 	0.783	0.738373
+Random Forest	0.758792	0.717272
