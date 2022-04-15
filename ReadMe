@@ -1,5 +1,5 @@
  
-1.	Abstract
+**1.	Abstract**
 Millions of mobile applications are being created by application developers every year. However, only a small fraction of that become successful depending upon the parameter chosen to identify the success for an application. The objective of the project is to build a machine learning model based on various parameters to predict the probability of success of an application. 
 2.	Methodology
 The choice of methodology for predicting application success is dependent on the available data. We used the data available on the Kaggle website that contained datapoints that had various parameter related to that application. We chose one of the datapoints as the success metric for a new app. 
